@@ -1,0 +1,25 @@
+ErrorDocument 404 /404.php
+
+# Security Hardening
+Options -Indexes
+
+# Deny access to sensitive files
+<FilesMatch "^\.(env|git|DS_Store|idea|vscode|sql|log)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to specific directories if accessed directly
+# Note: This might need adjustment if your app architecture relies on direct access to some PHP files in these folders via AJAX.
+# Based on current knowledge, actions/ are accessed directly via forms. includes/ likely not.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Block access to internal includes
+    RewriteRule ^includes/ - [F,L]
+    # Block access to templates
+    RewriteRule ^templates/ - [F,L]
+    # Block access to database backups or legacy
+    RewriteRule ^legacy_db/ - [F,L]
+    # Block access to logs
+    RewriteRule \.log$ - [F,L]
+</IfModule>

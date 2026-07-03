@@ -1,0 +1,3 @@
+ALTER TABLE customers
+ADD COLUMN mac_address VARCHAR(50) DEFAULT NULL AFTER package_id,
+ADD COLUMN ip_address VARCHAR(50) DEFAULT NULL AFTER mac_address;

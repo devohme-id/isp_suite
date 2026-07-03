@@ -1,0 +1,28 @@
+# Core Environment & Configuration
+.env
+
+# Logs
+*.log
+error.log
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs/Editors Config
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# User Uploads / Media Files
+uploads/*
+!uploads/.gitkeep
+
+# Composer/Vendor (in case Composer is added later)
+/vendor/

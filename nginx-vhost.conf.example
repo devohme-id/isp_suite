@@ -1,0 +1,68 @@
+server
+{
+    listen 80;
+    listen 443 ssl;
+    server_name 9bd8099befb4.sn.mynetname.net;
+    index index.php index.html index.htm default.php default.htm default.html;
+    
+    # Root path sesuaikan dengan environment Anda
+    root "C:/Program Files/PhpWebStudy-Data/app/nginx-1.29.4/nginx-1.29.4/html/billing-wifi";
+
+    # --- SSL Configuration ---
+    ssl_certificate    "C:/Program Files/PhpWebStudy-Data/server/CA/1769933764483/CA-1769933764483.crt";
+    ssl_certificate_key    "C:/Program Files/PhpWebStudy-Data/server/CA/1769933764483/CA-1769933764483.key";
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # --- PHP Support ---
+    #PHP-INFO-START
+    include enable-php-82.conf;
+    #PHP-INFO-END
+
+    # --- Custom Error Pages (IMPLEMENTASI 404.php) ---
+    # Arahkan error 404 ke file /404.php
+    error_page 404 /404.php;
+    
+    # (Opsional) Izinkan PHP mengembalikan 404 juga untuk ditangkap Nginx
+    fastcgi_intercept_errors on;
+
+    # --- Security Configuration ---
+    # Include file security tambahan (jika ada di folder project)
+    # Sesuaikan path ke file nginx-security.conf yang kita buat sebelumnya
+    include "C:/Program Files/PhpWebStudy-Data/app/nginx-1.29.4/nginx-1.29.4/html/billing-wifi/nginx-security.conf";
+
+    #REWRITE-START URL重写规则引用,修改后将导致面板设置的伪静态规则失效
+    include "C:/Program Files/PhpWebStudy-Data/server/vhost/rewrite/9bd8099befb4.sn.mynetname.net.conf";
+    #REWRITE-END
+
+    # --- Default Blocks (Bawaan) ---
+    # Block akses hidden files (Bisa dihapus jika sudah ada di nginx-security.conf)
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md)
+    {
+        return 404;
+    }
+
+    location ~ \.well-known{
+        allow all;
+    }
+
+    location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+    {
+        expires      30d;
+        error_log off;
+        access_log off;
+    }
+
+    location ~ .*\.(js|css)?$
+    {
+        expires      12h;
+        error_log off;
+        access_log off;
+    }
+    
+    access_log  "C:/Program Files/PhpWebStudy-Data/server/vhost/logs/9bd8099befb4.sn.mynetname.net.log";
+    error_log  "C:/Program Files/PhpWebStudy-Data/server/vhost/logs/9bd8099befb4.sn.mynetname.net.error.log";
+}
