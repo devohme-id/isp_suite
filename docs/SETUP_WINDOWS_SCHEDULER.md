@@ -209,5 +209,5 @@ C:\xampp\htdocs\billing-wifi\cron\cron_generate_invoices.php >> C:\xampp\htdocs\
 
 ---
 
-*Dokumen ini dibuat untuk ISP Billing WiFi System*
+*Dokumen ini dibuat untuk ISP Suite & FTTH Manager*
 *Terakhir diupdate: Januari 2026*

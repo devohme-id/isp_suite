@@ -465,7 +465,7 @@ foreach ($cust_invoice_status as $cid => $status) {
         </div>
 
         <div class="text-center mt-5 text-gray-400 text-xs">
-            <p>&copy; <?= date('Y') ?> ISP Billing System. Developed with TailPanel Style.</p>
+            <p>&copy; <?= date('Y') ?> ISP Suite & FTTH Manager. Developed with TailPanel Style.</p>
         </div>
     </div>
 </div>

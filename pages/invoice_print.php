@@ -167,7 +167,7 @@ $wa_url = "https://wa.me/" . $phone . "?text=" . urlencode($message);
                 <p class="text-xs font-bold text-yellow-800 mb-1">Instruksi Pembayaran</p>
                 <p class="text-[10px] text-yellow-700 leading-relaxed">
                     Silakan transfer ke:<br>
-                    <strong>BCA 1234567890</strong> a.n ISP Billing<br>
+                    <strong>BCA 1234567890</strong> a.n ISP Suite<br>
                     Dan upload bukti di halaman pelanggan.
                 </p>
             </div>

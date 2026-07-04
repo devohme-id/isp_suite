@@ -112,7 +112,7 @@ if (isset($_SESSION['user_id'])) {
     </div>
 
     <div class="absolute bottom-4 text-center text-xs text-gray-400">
-        &copy; <?= date('Y') ?> ISP Billing System. All rights reserved.
+        &copy; <?= date('Y') ?> ISP Suite & FTTH Manager. All rights reserved.
     </div>
 
 </body>

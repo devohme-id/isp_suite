@@ -380,7 +380,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`setting_key`, `setting_value`) VALUES
-('app_name', 'ISP Billing'),
+('app_name', 'ISP Suite'),
 ('app_icon', 'default_icon.png'),
 ('company_name', 'My ISP Company'),
 ('company_address', 'Jl. Internet No. 1'),
