@@ -98,6 +98,8 @@ $db_port = getenv('DB_PORT') ?: '3306';
 $db_name = getenv('DB_NAME');
 $db_user = getenv('DB_USER');
 $db_pass = getenv('DB_PASS');
+$db_socket_enabled = filter_var(getenv('DB_UNIX_SOCKET_ENABLED'), FILTER_VALIDATE_BOOLEAN);
+$db_socket = getenv('DB_UNIX_SOCKET');
 
 // For backwards compatibility (in case files use these constants directly)
 // Ideally, we should refactor everything to use $pdo or helper functions,
@@ -110,7 +112,13 @@ if (!defined('DB_NAME')) define('DB_NAME', $db_name);
 
 // --- Database Connection ---
 try {
-    $pdo = new PDO("mysql:host=" . $db_host . ";port=" . $db_port . ";dbname=" . $db_name . ";charset=utf8mb4", $db_user, $db_pass);
+    if ($db_socket_enabled && !empty($db_socket)) {
+        $dsn = "mysql:unix_socket=" . $db_socket . ";dbname=" . $db_name . ";charset=utf8mb4";
+    } else {
+        $dsn = "mysql:host=" . $db_host . ";port=" . $db_port . ";dbname=" . $db_name . ";charset=utf8mb4";
+    }
+
+    $pdo = new PDO($dsn, $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     // Disable emulation of prepared statements for better security against SQLi

@@ -78,6 +78,8 @@ git clone https://github.com/devohme-id/isp_suite.git
    DB_USER=root
    DB_PASS=PasswordAnda
    DB_NAME=isp_billing
+   DB_UNIX_SOCKET_ENABLED=false
+   DB_UNIX_SOCKET=/var/run/mysqld/mysqld.sock
 
    # Keamanan (Ganti dengan 32 karakter acak yang unik dan kuat)
    ENCRYPTION_KEY=x7j1vql4Q62oFzJ17q5ROUsvsKAVOQ6B
