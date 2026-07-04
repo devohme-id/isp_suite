@@ -1,7 +1,17 @@
 <?php
 // Helper to check active state
-function is_active($page) {
-    return strpos($_SERVER['PHP_SELF'], $page) !== false ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' : 'text-gray-600 hover:bg-[#F1F5F9] hover:text-blue-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-blue-400';
+function is_active($pages) {
+    if (!is_array($pages)) {
+        $pages = [$pages];
+    }
+    $active = false;
+    foreach ($pages as $page) {
+        if (strpos($_SERVER['PHP_SELF'], $page) !== false) {
+            $active = true;
+            break;
+        }
+    }
+    return $active ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' : 'text-gray-600 hover:bg-[#F1F5F9] hover:text-blue-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-blue-400';
 }
 ?>
 <!-- Sidebar -->
@@ -51,10 +61,14 @@ function is_active($page) {
                     <span class="sidebar-text truncate">Paket Internet</span>
                 </a>
             </li>
+            <!-- Jaringan FTTH -->
+            <li class="pt-4 pb-2 px-2.5">
+                <span class="sidebar-group-label block text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wide whitespace-normal break-words leading-tight">Jaringan FTTH</span>
+            </li>
             <li>
-                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg transition-colors <?= is_active('odp_management.php') ?>" href="<?= BASE_URL ?>/pages/odp_management.php">
-                     <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M12 10v12"/><path d="M7 10v12"/><path d="M17 10v12"/><path d="M7 2h10"/><path d="M12 2v8"/></svg>
-                    <span class="sidebar-text truncate">Manajemen ODP</span>
+                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg transition-colors <?= is_active(['ftth_network.php', 'olt_detail.php', 'dp_detail.php']) ?>" href="<?= BASE_URL ?>/pages/ftth_network.php">
+                    <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span class="sidebar-text truncate">Portal Jaringan FTTH</span>
                 </a>
             </li>
 
@@ -110,6 +124,12 @@ function is_active($page) {
                 </a>
             </li>
             <?php endif; ?>
+            <li>
+                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg transition-colors <?= is_active('about.php') ?>" href="<?= BASE_URL ?>/pages/about.php">
+                    <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
+                    <span class="sidebar-text truncate">Tentang Aplikasi</span>
+                </a>
+            </li>
         </ul>
     </nav>
     

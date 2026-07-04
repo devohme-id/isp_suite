@@ -1,0 +1,507 @@
+/* ============================================
+   FTTH Simulator — Design System
+   Dark theme with teal/cyan accents
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ---------- Design Tokens ---------- */
+:root {
+  /* Colors — Base */
+  --bg-deep:          #060a14;
+  --bg-primary:       #0a0e1a;
+  --bg-surface:       #111627;
+  --bg-elevated:      #181d30;
+  --bg-hover:         #1e2440;
+  --bg-active:        #252b4a;
+
+  /* Colors — Borders */
+  --border-subtle:    #1e2440;
+  --border-default:   #2a3055;
+  --border-strong:    #3a4070;
+
+  /* Colors — Text */
+  --text-primary:     #e8ecf4;
+  --text-secondary:   #8892b0;
+  --text-muted:       #5a6380;
+  --text-inverse:     #0a0e1a;
+
+  /* Colors — Accent */
+  --accent-teal:      #00d4aa;
+  --accent-teal-dim:  #00a886;
+  --accent-teal-bg:   rgba(0, 212, 170, 0.08);
+  --accent-teal-glow: rgba(0, 212, 170, 0.35);
+  --accent-indigo:    #6366f1;
+  --accent-indigo-dim:#4f46e5;
+  --accent-indigo-bg: rgba(99, 102, 241, 0.08);
+  --accent-cyan:      #22d3ee;
+  --accent-blue:      #3b82f6;
+
+  /* Colors — Semantic */
+  --color-success:    #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.1);
+  --color-warning:    #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-danger:     #ef4444;
+  --color-danger-bg:  rgba(239, 68, 68, 0.1);
+  --color-info:       #3b82f6;
+  --color-info-bg:    rgba(59, 130, 246, 0.1);
+
+  /* Colors — Equipment Categories */
+  --cat-active:       var(--accent-teal);
+  --cat-active-bg:    var(--accent-teal-bg);
+  --cat-passive:      var(--accent-indigo);
+  --cat-passive-bg:   var(--accent-indigo-bg);
+
+  /* Typography */
+  --font-ui:          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:        'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --text-xs:          0.6875rem;   /* 11px */
+  --text-sm:          0.75rem;     /* 12px */
+  --text-base:        0.8125rem;   /* 13px */
+  --text-md:          0.875rem;    /* 14px */
+  --text-lg:          1rem;        /* 16px */
+  --text-xl:          1.25rem;     /* 20px */
+  --text-2xl:         1.5rem;      /* 24px */
+  --text-3xl:         2rem;        /* 32px */
+
+  --leading-tight:    1.2;
+  --leading-normal:   1.5;
+  --leading-relaxed:  1.7;
+
+  /* Spacing */
+  --sp-1:  0.25rem;  /* 4px */
+  --sp-2:  0.5rem;   /* 8px */
+  --sp-3:  0.75rem;  /* 12px */
+  --sp-4:  1rem;     /* 16px */
+  --sp-5:  1.25rem;  /* 20px */
+  --sp-6:  1.5rem;   /* 24px */
+  --sp-8:  2rem;     /* 32px */
+  --sp-10: 2.5rem;   /* 40px */
+  --sp-12: 3rem;     /* 48px */
+
+  /* Radius */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:     0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md:     0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg:     0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl:     0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-glow:   0 0 20px var(--accent-teal-glow);
+  --shadow-glow-sm:0 0 10px var(--accent-teal-glow);
+
+  /* Glassmorphism */
+  --glass-bg:        rgba(17, 22, 39, 0.65);
+  --glass-bg-strong: rgba(17, 22, 39, 0.85);
+  --glass-blur:      12px;
+  --glass-border:    rgba(255, 255, 255, 0.06);
+
+  /* Transitions */
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast:   120ms;
+  --duration-normal: 200ms;
+  --duration-slow:   350ms;
+
+  /* Z-index */
+  --z-canvas:    1;
+  --z-node:      10;
+  --z-node-drag: 50;
+  --z-sidebar:   100;
+  --z-tooltip:   500;
+  --z-modal:     1000;
+  --z-overlay:   900;
+
+  /* Layout */
+  --sidebar-width:     260px;
+  --header-height:     56px;
+  --statusbar-height:  52px;
+}
+
+/* ---------- Light Theme Overrides ---------- */
+[data-theme="light"] {
+  color-scheme: light;
+  
+  /* Colors — Base */
+  --bg-deep:          #f1f5f9;
+  --bg-primary:       #f8fafc;
+  --bg-surface:       #ffffff;
+  --bg-elevated:      #ffffff;
+  --bg-hover:         #f1f5f9;
+  --bg-active:        #e2e8f0;
+
+  /* Colors — Borders */
+  --border-subtle:    #f1f5f9;
+  --border-default:   #cbd5e1;
+  --border-strong:    #94a3b8;
+
+  /* Colors — Text */
+  --text-primary:     #0f172a;
+  --text-secondary:   #475569;
+  --text-muted:       #64748b;
+  --text-inverse:     #ffffff;
+
+  /* Glassmorphism overrides for Light Mode */
+  --glass-bg:        rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.95);
+  --glass-border:    rgba(15, 23, 42, 0.08);
+  
+  /* Drop indicator for Light Mode */
+  --accent-teal-bg:   rgba(0, 168, 134, 0.08);
+}
+
+[data-theme="light"] .canvas-container {
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+}
+
+
+/* ---------- CSS Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 16px;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background: var(--bg-deep);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+a {
+  color: var(--accent-teal);
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--sp-2) var(--sp-3);
+  outline: none;
+  transition: border-color var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 3px var(--accent-teal-bg);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238892b0' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+  cursor: pointer;
+}
+
+select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  shape-rendering: geometricPrecision;
+  text-rendering: geometricPrecision;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent-teal);
+  color: var(--text-inverse);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+
+/* ---------- Utility Classes ---------- */
+.font-mono { font-family: var(--font-mono); }
+.text-xs   { font-size: var(--text-xs); }
+.text-sm   { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-md   { font-size: var(--text-md); }
+.text-lg   { font-size: var(--text-lg); }
+.text-xl   { font-size: var(--text-xl); }
+
+.text-muted     { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-accent    { color: var(--accent-teal); }
+.text-success   { color: var(--color-success); }
+.text-warning   { color: var(--color-warning); }
+.text-danger    { color: var(--color-danger); }
+
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+
+
+/* ---------- Glass Card ---------- */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.glass-card-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+
+/* ---------- Button System ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: all var(--duration-normal) var(--ease-out);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  background: var(--accent-teal);
+  color: var(--text-inverse);
+}
+
+.btn-primary:hover {
+  background: var(--accent-teal-dim);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.btn-secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-active);
+  border-color: var(--border-strong);
+}
+
+.btn-ghost {
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.btn-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.btn-sm {
+  padding: var(--sp-1) var(--sp-2);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
+}
+
+.btn-icon {
+  padding: var(--sp-2);
+  width: 32px;
+  height: 32px;
+}
+
+
+/* ---------- Badge ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 2px var(--sp-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sm);
+}
+
+.badge-active {
+  background: var(--cat-active-bg);
+  color: var(--cat-active);
+  border: 1px solid rgba(0, 212, 170, 0.15);
+}
+
+.badge-passive {
+  background: var(--cat-passive-bg);
+  color: var(--cat-passive);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.badge-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badge-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.badge-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+
+/* ---------- Status Indicator ---------- */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.success {
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+.status-dot.warning {
+  background: var(--color-warning);
+  box-shadow: 0 0 6px var(--color-warning);
+}
+
+.status-dot.danger {
+  background: var(--color-danger);
+  box-shadow: 0 0 6px var(--color-danger);
+}
+
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounceIn {
+  0%   { opacity: 0; transform: scale(0.3); }
+  50%  { opacity: 1; transform: scale(1.05); }
+  70%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 4px var(--accent-teal-glow); }
+  50%      { box-shadow: 0 0 12px var(--accent-teal-glow); }
+}
+
+@keyframes dashFlow {
+  to { stroke-dashoffset: -20; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in       { animation: fadeIn var(--duration-normal) var(--ease-out); }
+.animate-fade-in-up    { animation: fadeInUp var(--duration-slow) var(--ease-out); }
+.animate-fade-in-scale { animation: fadeInScale var(--duration-slow) var(--ease-spring); }
+.animate-bounce-in     { animation: bounceIn 500ms var(--ease-spring); }

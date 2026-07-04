@@ -14,7 +14,12 @@ Sistem ini dirancang untuk memudahkan administrasi harian ISP dengan modul-modul
   - Pembuatan invoice tagihan otomatis setiap bulan secara periodik.
   - Cetak invoice ramah printer thermal/kertas standar untuk penagih lapangan.
   - Pencatatan pembayaran lunas maupun tunggakan.
-- **Manajemen ODP (Optical Distribution Point)**: Pencatatan letak ODP, kapasitas port fiber optik, dan pemetaan port ODP ke masing-masing pelanggan.
+- **Portal Jaringan FTTH Terkonsolidasi**: Manajemen topologi optik hulu-ke-hilir (OLT, Backbone, RK, Distribusi, DP/ODP) dalam satu portal tab modern.
+  - *OLT Management*: Visualisasi grid port OLT GPON/EPON/XGS-PON & rute downstream.
+  - *Kabel & Core Matrix*: Visualisasi interaktif status core (Active, Idle, Reserved, Fault) dengan model mapping port core-level yang fleksibel.
+  - *Rumah Kabel (RK)*: Manajemen splicing sambungan fisik antar-kabel.
+  - *Drop Point (DP)*: Penomoran DP otomatis (`DP-[Blok][BB][Tube][Core]`) & Upstream Path Tracing diagram.
+  - *FTTH Simulator*: Simulasi attenuation dan redaman sirkuit fiber optik secara real-time.
 - **Manajemen Paket Layanan**: Pembuatan paket internet kustom dengan masa aktif dan harga yang fleksibel.
 - **Integrasi MikroTik**:
   - Autorisasi API MikroTik untuk mengaktifkan/menonaktifkan layanan pelanggan secara real-time berdasarkan status pembayaran mereka.

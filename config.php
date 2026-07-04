@@ -20,8 +20,8 @@ require_once __DIR__ . '/includes/env_loader.php';
 EnvLoader::load(__DIR__);
 
 // --- Security Headers ---
-// Prevent Clickjacking
-header("X-Frame-Options: DENY");
+// Prevent Clickjacking (Allow iframe on same origin for FTTH Simulator)
+header("X-Frame-Options: SAMEORIGIN");
 // XSS Protection (Browser-level)
 header("X-XSS-Protection: 1; mode=block");
 // Prevent MIME sniffing

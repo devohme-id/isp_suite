@@ -10,10 +10,10 @@ if (!$id) {
 
 // Fetch Customer Details
 $stmt = $pdo->prepare("
-    SELECT c.*, p.package_name, p.price as package_price, o.odp_name, o.zone_area
+    SELECT c.*, p.package_name, p.price as package_price, o.dp_code, o.dp_name, o.zone_area
     FROM customers c 
     LEFT JOIN internet_packages p ON c.package_id = p.id 
-    LEFT JOIN odp_points o ON c.odp_id = o.id
+    LEFT JOIN drop_points o ON c.dp_id = o.id
     WHERE c.id = ?
 ");
 $stmt->execute([$id]);
@@ -180,20 +180,30 @@ $reliability_score = $total_invoices > 0 ? (($on_time_count / ($on_time_count + 
                         </div>
 
                         <div>
-                            <p class="text-gray-500 dark:text-gray-400 text-xs mb-1">Koneksi ODP</p>
-                            <?php if(!empty($customer['odp_name'])): ?>
-                                <div class="flex flex-col bg-gray-50 dark:bg-slate-700/50 p-2 rounded-lg border border-gray-100 dark:border-slate-700">
+                            <p class="text-gray-500 dark:text-gray-400 text-xs mb-1">Koneksi Drop Point (DP)</p>
+                            <?php if(!empty($customer['dp_name'])): ?>
+                                <div class="flex flex-col bg-gray-50 dark:bg-slate-700/50 p-3 rounded-lg border border-gray-100 dark:border-slate-700 space-y-2">
                                     <div class="flex justify-between items-center">
-                                        <p class="font-bold text-gray-800 dark:text-white"><?= htmlspecialchars($customer['odp_name']) ?></p>
-                                        <span class="text-xs font-mono bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 rounded">Port: <?= $customer['odp_port'] ?? '-' ?></span>
+                                        <div>
+                                            <span class="text-[10px] bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-1.5 py-0.5 rounded font-bold mr-1"><?= htmlspecialchars($customer['dp_code']) ?></span>
+                                            <strong class="text-sm font-semibold text-gray-800 dark:text-white"><?= htmlspecialchars($customer['dp_name']) ?></strong>
+                                        </div>
+                                        <span class="text-xs font-mono bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 rounded">Port: <?= $customer['dp_port'] ?? '-' ?></span>
                                     </div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
-                                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                        <?= htmlspecialchars($customer['zone_area']) ?>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                        <svg class="size-3 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        <?= htmlspecialchars($customer['zone_area'] ?? '') ?>
                                     </p>
+                                    
+                                    <div class="pt-2 border-t border-gray-100 dark:border-slate-600">
+                                        <a href="dp_detail.php?id=<?= $customer['dp_id'] ?>" class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold flex items-center gap-1">
+                                            <span>Lihat Diagram Upstream</span>
+                                            <svg class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                        </a>
+                                    </div>
                                 </div>
                             <?php else: ?>
-                                <span class="text-gray-400 italic text-xs">Belum terhubung ke ODP</span>
+                                <span class="text-gray-400 italic text-xs">Belum terhubung ke Drop Point</span>
                             <?php endif; ?>
                         </div>
 

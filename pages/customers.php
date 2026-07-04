@@ -44,8 +44,8 @@ $customers = $stmt->fetchAll();
 // Fetch Packages for Dropdown
 $packages = $pdo->query("SELECT * FROM internet_packages WHERE is_active=1")->fetchAll();
 
-// Fetch ODPs for Dropdown
-$odps = $pdo->query("SELECT * FROM odp_points ORDER BY odp_name ASC")->fetchAll();
+// Fetch Drop Points (DP) for Dropdown
+$dps = $pdo->query("SELECT * FROM drop_points ORDER BY dp_code ASC, dp_name ASC")->fetchAll();
 
 // Statistics Calculation
 $stats = [
@@ -400,8 +400,8 @@ foreach ($cust_invoice_status as $cid => $status) {
                                             data-status="<?= $c['status'] ?>"
                                             data-mac="<?= htmlspecialchars($c['mac_address'] ?? '') ?>"
                                             data-ip="<?= htmlspecialchars($c['ip_address'] ?? '') ?>"
-                                            data-odp="<?= $c['odp_id'] ?? '' ?>"
-                                            data-port="<?= $c['odp_port'] ?? '' ?>">
+                                            data-dp="<?= $c['dp_id'] ?? '' ?>"
+                                            data-port="<?= $c['dp_port'] ?? '' ?>">
                                             <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
                                             Edit
                                         </button>
@@ -524,17 +524,17 @@ foreach ($cust_invoice_status as $cid => $status) {
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">ODP</label>
-                         <select name="odp_id" id="add_odp_id" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
-                            <option value="">Pilih ODP</option>
-                            <?php foreach($odps as $odp): ?>
-                                <option value="<?= $odp['id'] ?>"><?= htmlspecialchars($odp['odp_name']) ?></option>
+                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Drop Point (DP)</label>
+                         <select name="dp_id" id="add_dp_id" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
+                            <option value="">Pilih Drop Point</option>
+                            <?php foreach($dps as $dp): ?>
+                                <option value="<?= $dp['id'] ?>"><?= htmlspecialchars($dp['dp_code'] . ' - ' . $dp['dp_name']) ?></option>
                             <?php endforeach; ?>
                          </select>
                     </div>
                      <div>
-                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Port ODP</label>
-                         <select name="odp_port" id="add_odp_port" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white" disabled>
+                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Port Drop Point</label>
+                         <select name="dp_port" id="add_dp_port" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white" disabled>
                             <option value="">Pilih Port</option>
                          </select>
                     </div>
@@ -608,17 +608,17 @@ foreach ($cust_invoice_status as $cid => $status) {
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">ODP</label>
-                         <select name="odp_id" id="edit_odp_id" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
-                            <option value="">Pilih ODP</option>
-                            <?php foreach($odps as $odp): ?>
-                                <option value="<?= $odp['id'] ?>"><?= htmlspecialchars($odp['odp_name']) ?></option>
+                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Drop Point (DP)</label>
+                         <select name="dp_id" id="edit_dp_id" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
+                            <option value="">Pilih Drop Point</option>
+                            <?php foreach($dps as $dp): ?>
+                                <option value="<?= $dp['id'] ?>"><?= htmlspecialchars($dp['dp_code'] . ' - ' . $dp['dp_name']) ?></option>
                             <?php endforeach; ?>
                          </select>
                     </div>
                      <div>
-                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Port ODP</label>
-                         <select name="odp_port" id="edit_odp_port" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
+                         <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Port Drop Point</label>
+                         <select name="dp_port" id="edit_dp_port" class="py-3 px-4 pe-9 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
                             <option value="">Pilih Port</option>
                          </select>
                     </div>
@@ -715,34 +715,34 @@ foreach ($cust_invoice_status as $cid => $status) {
                 document.getElementById('edit_package_id').value = btn.dataset.package;
 
                 document.getElementById('edit_status').value = btn.dataset.status;
-                document.getElementById('edit_odp_id').value = btn.dataset.odp;
+                document.getElementById('edit_dp_id').value = btn.dataset.dp;
                 
                 // Load ports for edit (passing current port & customer ID to allow self-selection)
-                loadPorts(btn.dataset.odp, document.getElementById('edit_odp_port'), btn.dataset.port, btn.dataset.id);
+                loadPorts(btn.dataset.dp, document.getElementById('edit_dp_port'), btn.dataset.port, btn.dataset.id);
 
                 openModal('editCustomerModal');
             });
         });
 
-        // ODP Port Logic
-        const addOdpSelect = document.getElementById('add_odp_id');
-        const addPortSelect = document.getElementById('add_odp_port');
+        // DP Port Logic
+        const addDpSelect = document.getElementById('add_dp_id');
+        const addPortSelect = document.getElementById('add_dp_port');
         
-        const editOdpSelect = document.getElementById('edit_odp_id');
-        const editPortSelect = document.getElementById('edit_odp_port');
+        const editDpSelect = document.getElementById('edit_dp_id');
+        const editPortSelect = document.getElementById('edit_dp_port');
 
-        addOdpSelect.addEventListener('change', function() {
+        addDpSelect.addEventListener('change', function() {
             loadPorts(this.value, addPortSelect);
         });
 
-        editOdpSelect.addEventListener('change', function() {
-            // When user manually changes ODP in Edit Mode, reset selected port
+        editDpSelect.addEventListener('change', function() {
+            // When user manually changes DP in Edit Mode, reset selected port
             loadPorts(this.value, editPortSelect);
         });
 
-        function loadPorts(odpId, targetSelect, currentPort = null, currentCustomerId = null) {
-            if (!odpId) {
-                targetSelect.innerHTML = '<option value="">-- Pilih ODP Terlebih Dahulu --</option>';
+        function loadPorts(dpId, targetSelect, currentPort = null, currentCustomerId = null) {
+            if (!dpId) {
+                targetSelect.innerHTML = '<option value="">-- Pilih Drop Point Terlebih Dahulu --</option>';
                 targetSelect.disabled = true;
                 return;
             }
@@ -750,7 +750,7 @@ foreach ($cust_invoice_status as $cid => $status) {
             targetSelect.disabled = true;
             targetSelect.innerHTML = '<option value="">Memuat port...</option>';
 
-            fetch(`../actions/get_odp_ports.php?odp_id=${odpId}`)
+            fetch(`../actions/ftth_data.php?action=get_dp_ports&dp_id=${dpId}`)
                 .then(response => response.json())
                 .then(data => {
                     targetSelect.innerHTML = '<option value="">-- Pilih Port --</option>';

@@ -25,25 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // New Fields
         $mac = clean_input($_POST['mac_address'] ?? '');
         $ip = clean_input($_POST['ip_address'] ?? '');
-        $odp_id = !empty($_POST['odp_id']) ? (int) $_POST['odp_id'] : null;
-        $odp_port = !empty($_POST['odp_port']) ? (int) $_POST['odp_port'] : null;
+        $dp_id = !empty($_POST['dp_id']) ? (int) $_POST['dp_id'] : null;
+        $dp_port = !empty($_POST['dp_port']) ? (int) $_POST['dp_port'] : null;
         
         $code = generate_customer_code($pdo);
 
-        // Validation: Check ODP Port Collision
-        if ($odp_id && $odp_port) {
-            $check = $pdo->prepare("SELECT COUNT(*) FROM customers WHERE odp_id = ? AND odp_port = ?");
-            $check->execute([$odp_id, $odp_port]);
+        // Validation: Check DP Port Collision
+        if ($dp_id && $dp_port) {
+            $check = $pdo->prepare("SELECT COUNT(*) FROM customers WHERE dp_id = ? AND dp_port = ?");
+            $check->execute([$dp_id, $dp_port]);
             if ($check->fetchColumn() > 0) {
-                set_flash_message('error', "Gagal: Port $odp_port pada ODP tersebut sudah terisi.");
+                set_flash_message('error', "Gagal: Port $dp_port pada Drop Point tersebut sudah terisi.");
                 header("Location: ../pages/customers.php");
                 exit();
             }
         }
 
-        $stmt = $pdo->prepare("INSERT INTO customers (customer_code, name, email, phone, address, package_id, installation_date, latitude, longitude, mac_address, ip_address, odp_id, odp_port) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO customers (customer_code, name, email, phone, address, package_id, installation_date, latitude, longitude, mac_address, ip_address, dp_id, dp_port) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         try {
-            $stmt->execute([$code, $name, $email, $phone, $address, $package_id, $install_date, $lat, $long, $mac, $ip, $odp_id, $odp_port]);
+            $stmt->execute([$code, $name, $email, $phone, $address, $package_id, $install_date, $lat, $long, $mac, $ip, $dp_id, $dp_port]);
             set_flash_message('success', 'Pelanggan berhasil ditambahkan.');
         } catch (PDOException $e) {
             set_flash_message('error', 'Gagal menambah pelanggan: ' . $e->getMessage());
@@ -62,23 +62,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // New Fields
         $mac = clean_input($_POST['mac_address'] ?? '');
         $ip = clean_input($_POST['ip_address'] ?? '');
-        $odp_id = !empty($_POST['odp_id']) ? (int) $_POST['odp_id'] : null;
-        $odp_port = !empty($_POST['odp_port']) ? (int) $_POST['odp_port'] : null;
+        $dp_id = !empty($_POST['dp_id']) ? (int) $_POST['dp_id'] : null;
+        $dp_port = !empty($_POST['dp_port']) ? (int) $_POST['dp_port'] : null;
 
-        // Validation: Check ODP Port Collision (excluding self)
-        if ($odp_id && $odp_port) {
-            $check = $pdo->prepare("SELECT COUNT(*) FROM customers WHERE odp_id = ? AND odp_port = ? AND id != ?");
-            $check->execute([$odp_id, $odp_port, $id]);
+        // Validation: Check DP Port Collision (excluding self)
+        if ($dp_id && $dp_port) {
+            $check = $pdo->prepare("SELECT COUNT(*) FROM customers WHERE dp_id = ? AND dp_port = ? AND id != ?");
+            $check->execute([$dp_id, $dp_port, $id]);
             if ($check->fetchColumn() > 0) {
-                set_flash_message('error', "Gagal: Port $odp_port pada ODP tersebut sudah terisi oleh pelanggan lain.");
+                set_flash_message('error', "Gagal: Port $dp_port pada Drop Point tersebut sudah terisi oleh pelanggan lain.");
                 header("Location: ../pages/customers.php");
                 exit();
             }
         }
 
-        $stmt = $pdo->prepare("UPDATE customers SET name=?, email=?, phone=?, address=?, package_id=?, latitude=?, longitude=?, status=?, mac_address=?, ip_address=?, odp_id=?, odp_port=? WHERE id=?");
+        $stmt = $pdo->prepare("UPDATE customers SET name=?, email=?, phone=?, address=?, package_id=?, latitude=?, longitude=?, status=?, mac_address=?, ip_address=?, dp_id=?, dp_port=? WHERE id=?");
         try {
-            $stmt->execute([$name, $email, $phone, $address, $package_id, $lat, $long, $status, $mac, $ip, $odp_id, $odp_port, $id]);
+            $stmt->execute([$name, $email, $phone, $address, $package_id, $lat, $long, $status, $mac, $ip, $dp_id, $dp_port, $id]);
             set_flash_message('success', 'Data pelanggan berhasil diperbarui.');
         } catch (PDOException $e) {
             set_flash_message('error', 'Update gagal: ' . $e->getMessage());
