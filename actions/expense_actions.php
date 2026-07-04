@@ -46,15 +46,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Validate MIME Type
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             $mime = $finfo->file($fileTmp);
-            $allowed_mimes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+            $allowed_mimes = [
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/gif' => 'gif',
+                'application/pdf' => 'pdf'
+            ];
             
-            if (!in_array($mime, $allowed_mimes)) {
+            if (!array_key_exists($mime, $allowed_mimes)) {
                 set_flash_message('error', 'Hanya file gambar (JPG, PNG) atau PDF yang diperbolehkan.');
                 header("Location: ../pages/expenses.php");
                 exit();
             }
 
-            $newFileName = 'exp_' . time() . '_' . $fileOriginalName;
+            $ext = $allowed_mimes[$mime];
+            $newFileName = 'exp_' . time() . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
             $dest = UPLOAD_DIR . $newFileName;
 
             if (move_uploaded_file($fileTmp, $dest)) {

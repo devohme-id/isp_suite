@@ -27,12 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Handle File Upload (Icon)
         if (isset($_FILES['app_icon']) && $_FILES['app_icon']['error'] === UPLOAD_ERR_OK) {
-            $allowed_types = ['image/png', 'image/jpeg', 'image/x-icon', 'image/svg+xml'];
-            if (!in_array($_FILES['app_icon']['type'], $allowed_types)) {
-                set_flash_message('error', 'Format file tidak valid (PNG, JPG, ICO, SVG).');
-                header("Location: ../pages/settings.php");
-                exit;
-            }
+            $fileTmp = $_FILES['app_icon']['tmp_name'];
             
             // Limit size 500KB
             if ($_FILES['app_icon']['size'] > 500 * 1024) {
@@ -41,10 +36,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  exit;
             }
 
-            $ext = pathinfo($_FILES['app_icon']['name'], PATHINFO_EXTENSION);
-            $filename = 'app_icon_' . time() . '.' . $ext;
+            // Validate MIME Type strictly via finfo
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->file($fileTmp);
+            $allowed_mimes = [
+                'image/png' => 'png',
+                'image/jpeg' => 'png', // save jpeg as png or keeping its type
+                'image/jpg' => 'png',
+                'image/x-icon' => 'ico',
+                'image/svg+xml' => 'svg'
+            ];
+
+            // Some servers return image/jpeg or image/pjpeg
+            if ($mime === 'image/jpeg' || $mime === 'image/pjpeg') {
+                $allowed_mimes[$mime] = 'jpg';
+            }
             
-            if (move_uploaded_file($_FILES['app_icon']['tmp_name'], UPLOAD_DIR . $filename)) {
+            if (!array_key_exists($mime, $allowed_mimes)) {
+                set_flash_message('error', 'Format file tidak valid (PNG, JPG, ICO, SVG).');
+                header("Location: ../pages/settings.php");
+                exit;
+            }
+            
+            $ext = $allowed_mimes[$mime];
+            $filename = 'app_icon_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+            
+            if (move_uploaded_file($fileTmp, UPLOAD_DIR . $filename)) {
                  $stmt = $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'app_icon'");
                  $stmt->execute([$filename]);
             }

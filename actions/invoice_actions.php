@@ -40,15 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Validate MIME Type
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             $mime = $finfo->file($fileTmp);
-            $allowed_mimes = ['image/jpeg', 'image/png', 'image/gif'];
+            $allowed_mimes = [
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/gif' => 'gif'
+            ];
             
-            if (!in_array($mime, $allowed_mimes)) {
+            if (!array_key_exists($mime, $allowed_mimes)) {
                 set_flash_message('error', 'Hanya file gambar (JPG, PNG) yang diperbolehkan.');
                 header("Location: ../pages/invoices.php");
-                 exit();
+                exit();
             }
 
-            $newFileName = time() . '_' . $fileOriginalName;
+            $ext = $allowed_mimes[$mime];
+            $newFileName = time() . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
             $dest = UPLOAD_DIR . $newFileName;
 
             if (move_uploaded_file($fileTmp, $dest)) {
