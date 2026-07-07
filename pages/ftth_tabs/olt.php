@@ -94,7 +94,14 @@ try {
                                         </span>
                                     </div>
                                     <div>
-                                        <span class="block font-semibold text-gray-800 dark:text-white"><?= htmlspecialchars($olt['olt_name']) ?></span>
+                                        <div class="flex items-center gap-x-2">
+                                            <span class="block font-semibold text-gray-800 dark:text-white"><?= htmlspecialchars($olt['olt_name']) ?></span>
+                                            <?php 
+                                                $type_val = $olt['olt_type'] ?? 'GPON';
+                                                $type_color = $type_val === 'EPON' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+                                            ?>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase <?= $type_color ?>"><?= htmlspecialchars($type_val) ?></span>
+                                        </div>
                                         <span class="block text-xs text-gray-500 dark:text-gray-400"><?= htmlspecialchars($olt['olt_model'] ?: '-') ?></span>
                                     </div>
                                 </div>
@@ -155,20 +162,31 @@ try {
                     <input type="text" name="olt_name" id="oltName" required placeholder="e.g. OLT-PUSAT-01" class="py-3 px-4 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Model / Brand</label>
-                    <input type="text" name="olt_model" id="oltModel" placeholder="e.g. Huawei MA5608T" class="py-3 px-4 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
+                    <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Tipe OLT</label>
+                    <select name="olt_type" id="oltType" onchange="updatePortLabel()" class="py-3 px-4 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
+                        <option value="GPON">GPON</option>
+                        <option value="EPON">EPON</option>
+                    </select>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-5 mb-5">
                 <div>
+                    <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Model / Brand</label>
+                    <input type="text" name="olt_model" id="oltModel" placeholder="e.g. Huawei MA5608T" class="py-3 px-4 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
+                </div>
+                <div>
                     <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">IP Address</label>
                     <input type="text" name="ip_address" id="ipAddress" placeholder="e.g. 10.10.20.2" class="py-3 px-4 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
                 </div>
-                <div id="totalPortsContainer">
-                    <label class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Jumlah Port GPON</label>
+            </div>
+
+            <div class="grid grid-cols-2 gap-5 mb-5" id="totalPortsContainer">
+                <div>
+                    <label id="totalPortsLabel" class="block text-sm font-semibold mb-2 text-gray-800 dark:text-white">Jumlah Port GPON</label>
                     <input type="number" name="total_ports" id="totalPorts" value="8" min="1" max="128" class="py-3 px-4 block w-full border-gray-200 dark:border-slate-700 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 bg-[#F1F5F9] dark:bg-slate-900 dark:text-white">
                 </div>
+                <div></div>
             </div>
 
             <div class="mb-5">
@@ -230,20 +248,27 @@ try {
 </div>
 
 <script>
+    function updatePortLabel() {
+        var type = document.getElementById('oltType').value;
+        document.getElementById('totalPortsLabel').innerText = 'Jumlah Port ' + type;
+    }
+
     function openOltModal(mode, data = null) {
         if (mode === 'add') {
             document.getElementById('modalTitle').innerText = 'Tambah OLT Baru';
             document.getElementById('formAction').value = 'create_olt';
             document.getElementById('oltId').value = '';
             document.getElementById('oltName').value = '';
+            document.getElementById('oltType').value = 'GPON';
             document.getElementById('oltModel').value = '';
             document.getElementById('ipAddress').value = '';
             document.getElementById('totalPorts').value = '8';
-            document.getElementById('totalPortsContainer').style.display = 'block';
+            document.getElementById('totalPortsContainer').style.display = '';
             document.getElementById('location').value = '';
             document.getElementById('latitude').value = '';
             document.getElementById('longitude').value = '';
             document.getElementById('notes').value = '';
+            updatePortLabel();
         }
         openModal('oltModal');
     }
@@ -253,6 +278,7 @@ try {
         document.getElementById('formAction').value = 'update_olt';
         document.getElementById('oltId').value = data.id;
         document.getElementById('oltName').value = data.olt_name;
+        document.getElementById('oltType').value = data.olt_type || 'GPON';
         document.getElementById('oltModel').value = data.olt_model || '';
         document.getElementById('ipAddress').value = data.ip_address || '';
         document.getElementById('totalPortsContainer').style.display = 'none'; // Cannot change total ports after creation
@@ -260,6 +286,7 @@ try {
         document.getElementById('latitude').value = data.latitude || '';
         document.getElementById('longitude').value = data.longitude || '';
         document.getElementById('notes').value = data.notes || '';
+        updatePortLabel();
         openModal('oltModal');
     }
 

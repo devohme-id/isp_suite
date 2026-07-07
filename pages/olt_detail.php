@@ -99,6 +99,14 @@ $usage_percent = ($olt['total_ports'] > 0) ? ($olt['active_ports'] / $olt['total
                             <span class="text-sm font-semibold text-gray-800 dark:text-white"><?= htmlspecialchars($olt['olt_model'] ?: '-') ?></span>
                         </div>
                         <div class="flex justify-between border-b border-gray-100 dark:border-slate-700 pb-2">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Tipe OLT</span>
+                            <?php 
+                                $detail_type = $olt['olt_type'] ?? 'GPON';
+                                $detail_type_color = $detail_type === 'EPON' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+                            ?>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold <?= $detail_type_color ?>"><?= htmlspecialchars($detail_type) ?></span>
+                        </div>
+                        <div class="flex justify-between border-b border-gray-100 dark:border-slate-700 pb-2">
                             <span class="text-sm text-gray-500 dark:text-gray-400">IP Address</span>
                             <span class="text-sm font-semibold text-gray-800 dark:text-white"><?= htmlspecialchars($olt['ip_address'] ?: '-') ?></span>
                         </div>

@@ -12,12 +12,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'create_olt') {
         $name = clean_input($_POST['olt_name']);
         $model = clean_input($_POST['olt_model']);
+        $olt_type = clean_input($_POST['olt_type'] ?? 'GPON');
         $ip = clean_input($_POST['ip_address']);
         $location = clean_input($_POST['location']);
         $ports = (int)$_POST['total_ports'];
         $lat = clean_input($_POST['latitude']);
         $lng = clean_input($_POST['longitude']);
         $notes = clean_input($_POST['notes']);
+
+        // Validate olt_type
+        if (!in_array($olt_type, ['GPON', 'EPON'])) {
+            $olt_type = 'GPON';
+        }
 
         if (empty($name) || $ports <= 0) {
             set_flash_message('error', 'Nama OLT dan Jumlah Port harus diisi dengan benar.');
@@ -39,15 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Insert OLT
-            $stmt = $pdo->prepare("INSERT INTO olts (olt_name, olt_model, ip_address, location, total_ports, latitude, longitude, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$name, $model, $ip, $location, $ports, $lat, $lng, $notes]);
+            $stmt = $pdo->prepare("INSERT INTO olts (olt_name, olt_model, olt_type, ip_address, location, total_ports, latitude, longitude, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $model, $olt_type, $ip, $location, $ports, $lat, $lng, $notes]);
             $olt_id = $pdo->lastInsertId();
 
-            // Create Ports
-            $stmt_port = $pdo->prepare("INSERT INTO olt_ports (olt_id, port_number, port_label, port_type, status) VALUES (?, ?, ?, 'GPON', 'inactive')");
+            // Create Ports with dynamic type based on OLT type
+            $stmt_port = $pdo->prepare("INSERT INTO olt_ports (olt_id, port_number, port_label, port_type, status) VALUES (?, ?, ?, ?, 'inactive')");
             for ($i = 1; $i <= $ports; $i++) {
-                $port_label = "GPON PORT " . $i;
-                $stmt_port->execute([$olt_id, $i, $port_label]);
+                $port_label = $olt_type . " PORT " . $i;
+                $stmt_port->execute([$olt_id, $i, $port_label, $olt_type]);
             }
 
             $pdo->commit();
@@ -65,11 +71,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int)($_POST['id'] ?? 0);
         $name = clean_input($_POST['olt_name']);
         $model = clean_input($_POST['olt_model']);
+        $olt_type = clean_input($_POST['olt_type'] ?? 'GPON');
         $ip = clean_input($_POST['ip_address']);
         $location = clean_input($_POST['location']);
         $lat = clean_input($_POST['latitude']);
         $lng = clean_input($_POST['longitude']);
         $notes = clean_input($_POST['notes']);
+
+        // Validate olt_type
+        if (!in_array($olt_type, ['GPON', 'EPON'])) {
+            $olt_type = 'GPON';
+        }
 
         if (!$id || empty($name)) {
             set_flash_message('error', 'ID OLT dan Nama OLT tidak boleh kosong.');
@@ -90,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
 
-            $stmt = $pdo->prepare("UPDATE olts SET olt_name = ?, olt_model = ?, ip_address = ?, location = ?, latitude = ?, longitude = ?, notes = ? WHERE id = ?");
-            $stmt->execute([$name, $model, $ip, $location, $lat, $lng, $notes, $id]);
+            $stmt = $pdo->prepare("UPDATE olts SET olt_name = ?, olt_model = ?, olt_type = ?, ip_address = ?, location = ?, latitude = ?, longitude = ?, notes = ? WHERE id = ?");
+            $stmt->execute([$name, $model, $olt_type, $ip, $location, $lat, $lng, $notes, $id]);
 
             $pdo->commit();
             set_flash_message('success', 'Data OLT berhasil diperbarui.');

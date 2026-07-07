@@ -90,6 +90,7 @@ CREATE TABLE `olts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `olt_name` varchar(100) NOT NULL UNIQUE,
   `olt_model` varchar(100) DEFAULT NULL,
+  `olt_type` enum('GPON','EPON') NOT NULL DEFAULT 'GPON',
   `ip_address` varchar(45) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `total_ports` int(11) NOT NULL DEFAULT 8,
